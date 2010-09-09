@@ -13,14 +13,12 @@ class Vlad::Git
   def checkout(revision, destination)
     destination = File.join(destination, 'repo')
     revision = 'HEAD' if revision =~ /head/i
-    new_revision = ('HEAD' == revision) ? "origin" : revision
 
     if fast_checkout_applicable?(revision, destination)
       [ "cd #{destination}",
-        "#{git_cmd} checkout -q origin",
-        "#{git_cmd} fetch",
-        "#{git_cmd} reset --hard #{new_revision}",
-        "#{git_cmd} submodule init",
+	"#{git_cmd} checkout -q master",
+        "#{git_cmd} reset --hard",
+	"#{git_cmd} pull origin master",
         "#{git_cmd} submodule update",
         "#{git_cmd} branch -f deployed-#{revision} #{revision}",
         "#{git_cmd} checkout deployed-#{revision}",
@@ -72,7 +70,6 @@ class Vlad::Git
 
     begin
       cmd = [ "if cd #{destination}",
-              "#{git_cmd} rev-parse #{revision}",
               "#{git_cmd} remote -v | grep -q #{repository}",
               "cd -; then exit 0; else exit 1; fi &>/dev/null" ].join(" && ")
       run cmd

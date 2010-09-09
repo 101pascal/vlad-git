@@ -4,7 +4,7 @@ require "hoe"
 Hoe.plugins.delete :rubyforge
 Hoe.plugin :doofus, :git
 
-Hoe.spec "vlad-git" do
+Hoe.spec "vlad-git-pascal" do
   developer "John Barnette", "code@jbarnette.com"
   developer "Aaron Suggs", "aaron@ktheory.com"
 
