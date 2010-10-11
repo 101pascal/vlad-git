@@ -3,8 +3,8 @@ class Vlad::Git
   # Duh.
   VERSION = "2.2.0"
 
-  set :source,  Vlad::Git.new
-  set :git_cmd, "git"
+  Rake::RemoteTask.set :source,  Vlad::Git.new
+  Rake::RemoteTask.set :git_cmd, "git"
 
   # Returns the command that will check out +revision+ from the
   # repository into directory +destination+.  +revision+ can be any
