@@ -5,6 +5,7 @@ class Vlad::Git
 
   Rake::RemoteTask.set :source,  Vlad::Git.new
   Rake::RemoteTask.set :git_cmd, "git"
+  Rake::RemoteTask.set :git_branch, "master" # Override with the branch you'd like to deploy from
 
   # Returns the command that will check out +revision+ from the
   # repository into directory +destination+.  +revision+ can be any
@@ -16,9 +17,9 @@ class Vlad::Git
 
     if fast_checkout_applicable?(revision, destination)
       [ "cd #{destination}",
-	"#{git_cmd} checkout -q master",
+	"#{git_cmd} checkout -q #{git_branch}",
         "#{git_cmd} reset --hard",
-	"#{git_cmd} pull origin master",
+	"#{git_cmd} pull origin #{git_branch}",
         "#{git_cmd} submodule update",
         "#{git_cmd} branch -f deployed-#{revision} #{revision}",
         "#{git_cmd} checkout deployed-#{revision}",
@@ -28,6 +29,7 @@ class Vlad::Git
       [ "rm -rf #{destination}",
         "#{git_cmd} clone #{repository} #{destination}",
         "cd #{destination}",
+	"#{git_cmd} checkout -q #{git_branch}",
         "#{git_cmd} submodule init",
         "#{git_cmd} submodule update",
         "#{git_cmd} checkout -f -b deployed-#{revision} #{revision}",
